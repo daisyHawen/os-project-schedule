@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>基于动态优先权的进程调度算法模拟</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+    -->
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+    <link rel="stylesheet" href="css/atelier-heath.light.css">
+    <script src="js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function(e) {
+
+
+        loadVT("first");
+        loadPro("pro");
+        loadRedu("reduceInfo");
+        loadTable();
+
+        var times = 0;
+        $('#next').click(function(e) {
+            if (times < alltimes) {
+                $('#reduceInfo tr').eq(times).fadeIn();
+                times++;
+            } else {
+                return false;
+            }
+        });
+        $('#before').click(function(e) {
+            if (times > 0) {
+                $('#reduceInfo tr').eq(times - 1).fadeOut();
+                times--;
+            } else {
+                return false;
+            }
+        });
+
+    });
+    </script>
+    <style>
+html {background: url(bg.jpg) repeat ;background-size: 100%;}
+/*background-position: 0% 66%;}*/
+/*body{
+background: url(bg.png) 10% no-repeat;
+background-position: 95% -17%;
+width: 100%;
+min-height: 600px;
+margin-top: 100px;}*/
+body{
+    background:transparent;
+}
+.container{width: 70%;margin-top: 10%;}
+</style>
+</head>
+
+<body>
+    <section id="container" class="sidebar-closed">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand active" href="index.html">Group IV</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li  class="active">
+                        <a href="team.html">分工</a>
+                    </li>
+                    <li>
+                        <a href="output.html">展示</a>
+                    </li>
+                    <li>
+                        <a href="code.html">代码</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse --> </nav>
+
+        <!-- <section class="wrapper">
+        -->
+        <section class="wrapper">
+            <section class="container" role="main">
+                <div class="row">
+
+                        <section class="panel">
+                            <header class="red">
+                                <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                    <h4>
+                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                        团队分工
+                                    </h4></a>
+                            </header>
+                            <div id="collapseThree" class="panel-collapse collapse in">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>姓名</th>
+                                            <th>负责部分</th>
+                                            <th>组内评分</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>xxx</td>
+                                            <td>银行家算法编码实现、UI设计及实现</td>
+                                            <td>100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>xxx</td>
+                                            <td>数据结构及程序框架设计以及前后台整合</td>
+                                            <td>99</td>
+                                        </tr>
+                                        <tr>
+                                            <td>xxx</td>
+                                            <td>主控算法实现</td>
+                                            <td>98</td>
+                                        </tr>
+                                        <tr>
+                                            <td>xxx</td>
+                                            <td>测试及文档撰写</td>
+                                            <td>97</td>
+                                        </tr>
+                                        <tr>
+                                            <td>xxx</td>
+                                            <td>队列相关接口函数实现</td>
+                                            <td>96</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+            </section>
+        </section>
+    </section>
+    <!-- </section>
+    -->
+
+    <script src="js/highlight.min.js"></script>
+    <script >hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>

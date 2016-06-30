@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>基于动态优先权的进程调度算法模拟</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" />
+    -->
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" href="css/atelier-heath.light.css">
+    <link rel="stylesheet" href="css/fuelux-wizard.css">
+    <script src="js/highlight.pack.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad();
+    </script>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function(e) {
+        go();
+    });
+    $("html").keypress(function(e) {
+        var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+        if (keyCode == 13) {
+            nextUnitTime();
+        }
+    });
+    </script>
+    </script>
+    <style>
+    html {
+        background: url(bg.jpg) repeat;
+        background-size: 100% 100%;
+        background-origin:content-box;
+        height: 100%;
+    }
+    /*background-position: 0% 66%;}*/
+    /*body{
+background: url(bg.png) 10% no-repeat;
+background-position: 95% -17%;
+width: 100%;
+min-height: 600px;
+margin-top: 100px;}*/
+    body {
+        background:transparent;
+    }
+    </style>
+</head>
+
+<body style="height:1200px;">
+    <section id="container" class="sidebar-closed">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand active" href="index.html">Group IV</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="team.html">分工</a>
+                    </li>
+                    <li class="active">
+                        <a href="output.html">展示</a>
+                    </li>
+                    <li>
+                        <a href="code.html">代码</a>
+                    </li>
+                    <li>
+                        <ul class="pagination" id="resource_info">
+                            <li><a href="#">可用资源</a>
+                            </li>
+                            <li><a href="#">1</a>
+                            </li>
+                            <li><a href="#">2</a>
+                            </li>
+                            <li><a href="#">3</a>
+                            </li>
+                            <li><a href="#">4</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+                <div class="navbar-form navbar-right">
+
+                    <button onclick="addRandomProcess()" type="button" class="btn btn-success" style="float:left;margin-right:5px;" data-dismiss="modal" aria-hidden="true">快速创建</button>
+                    <button class="halfup navbar-left btn btn-default" id="mymodal" data-toggle="modal" data-target="#myModal">
+
+                        <span class="glyphicon glyphicon-forward"></span>
+                        新建
+                    </button>
+                    <button class="halfup navbar-left btn btn-danger" id="nowtime">当前时刻：0</button>
+                    <button onclick="nextUnitTime()" class="halfup navbar-left btn btn-default" id="next">
+                        <span class="glyphicon glyphicon-arrow-down"></span>
+                        下一步
+                    </button>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+
+        <!-- <section class="wrapper">
+        -->
+        <section class="wrapper">
+            <section class="container" role="main">
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <div class="piece first-piece">
+                            <header>
+                                <div class="header">
+                                    <h1>
+                                        <span class="glyphicon glyphicon-flag"></span>
+                                        运行队列
+                                    </h1>
+                                    <div class="decoration"></div>
+                                </div>
+                            </header>
+                            <ul class="box nav-hz queue" id="RunningQueue">
+
+                            </ul>
+                        </div>
+                        <div class="piece">
+                            <header>
+                                <div class="header">
+                                    <h1>
+                                        <span class="glyphicon glyphicon glyphicon-export"></span>
+                                        就绪队列
+                                    </h1>
+                                    <div class="decoration"></div>
+                                </div>
+                            </header>
+                            <ul class="box nav-hz queue" id="ReadyQueue">
+
+                            </ul>
+                        </div>
+                        <div class="piece">
+                            <header>
+                                <div class="header">
+                                    <h1>
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        等待队列
+                                    </h1>
+                                    <div class="decoration"></div>
+                                </div>
+                            </header>
+                            <ul class="box nav-hz queue" id="WaitingQueue">
+
+                            </ul>
+                        </div>
+                        <div class="piece">
+                            <header>
+                                <div class="header">
+                                    <h1>
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                        完成队列
+                                    </h1>
+                                    <div class="decoration"></div>
+                                </div>
+                            </header>
+                            <ul class="box nav-hz queue" id="FinishedQueue">
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </section>
+    </section>
+    <!-- </section>
+    -->
+    <div class="modal fade" id="myRes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">初始化资源个数</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-wrapper">
+                        <form>
+                            <div class="field-box">
+                                <label>资源:</label>
+                                <input id="Resource" class="form-control" type="text">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button onclick="setResource()" type="button" class="btn btn-danger" style="float:left;margin-right:5px;" data-dismiss="modal" aria-hidden="true">确定</button>
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+
+                    <h4 class="modal-title" id="myModalLabel">新建进程</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-wrapper">
+                        <form>
+                            <div class="field-box">
+                                <label>进程名称:</label>
+                                <input id="ProcessName" class="form-control" type="text">
+                            </div>
+                            <div class="field-box">
+                                <label>进程ID:</label>
+                                <input id="pID" class="form-control" type="text">
+                            </div>
+                            <div class="field-box">
+                                <label>进程类型:</label>
+                                <select id="Type" class="form-control" id="Grade">
+                                    <option value="">请选择类型</option>
+                                    <option value="0">用户进程</option>
+                                    <option value="1">系统进程</option>
+                                </select>
+                            </div>
+                            <div class="field-box success">
+                                <label>请求资源时间:</label>
+                                <input id="ApplyResTime" class="form-control" type="text">
+                            </div>
+                            <div class="field-box error">
+                                <label>所需资源:</label>
+                                <input id="Res" class="form-control" type="text">
+                            </div>
+                            <div class="field-box">
+                                <label>共需CPU时间:</label>
+                                <input id="TimeToRun" class="form-control" type="text">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button onclick="addProcessFromHTML()" type="button" class="btn btn-danger" style="float:left;margin-right:5px;" data-dismiss="modal" aria-hidden="true">创建进程</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <script src="js/highlight.min.js"></script>
+    <script>
+    hljs.initHighlightingOnLoad();
+    </script>
+</body>
+
+</html>
